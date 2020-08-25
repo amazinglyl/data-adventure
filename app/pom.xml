@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.google.sps</groupId>
-  // TODO: rename artifactId
+  <!-- TODO: rename artifactId -->
   <artifactId>maps-hello-world</artifactId>
   <version>1</version>
   <packaging>war</packaging>
