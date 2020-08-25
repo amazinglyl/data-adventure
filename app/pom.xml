@@ -32,7 +32,8 @@
         <artifactId>appengine-maven-plugin</artifactId>
         <version>2.2.0</version>
         <configuration>
-          <deploy.projectId>YOUR_PROJECT_ID_HERE</deploy.projectId>
+          // A project id created from Google cloud platform.
+          <deploy.projectId>sample-java-project-287504</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
