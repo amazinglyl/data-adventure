@@ -2,14 +2,20 @@
 <html>
 <head>
   <title>Test Google Maps API</title>
-  <!-- TODO: update api key -->
+  <!-- TODO: make api key private to avoid key theft. -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrcviYx9sg6F5vI9VHkx_aYt0PLlAVt6U"></script>
+  <!-- Charts -->
+  <script src="https://www.gstatic.com/charts/loader.js?key=AIzaSyCrcviYx9sg6F5vI9VHkx_aYt0PLlAVt6U"></script>
   <script src="script.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body onload="createMap();">
   <h1>Hello Sydney!</h1>
+  <!-- Map -->
   <div id="map"></div>
   <p>This is a Map for the city of Sydney!</p>
+  
+  <!-- Chart -->
+  <div id="chart"></div>
 </body>
 </html>

@@ -1,4 +1,8 @@
-/** Call Google Maps API, create a map and add it to the webpage. */
+/**
+ * Map related functions.
+ */
+
+/** Call Google Maps API, create a map and add landmarks. */
 function createMap() {
     // Add a map.
     const map = new google.maps.Map(
@@ -45,5 +49,34 @@ function addLandmarkToMap(map, landmark) {
   const infoWindow = new google.maps.InfoWindow({content: contentString});
   marker.addListener('click', () => {
     infoWindow.open(map, marker);
+  });
+}
+
+/**
+ * Charts related functions.
+ */
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+/** Fetches landmark-info and uses it to create a chart. */
+function drawChart() {
+  fetch('/landmark-info').then(response => response.json())
+  .then((vistorsByYear) => {
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Year');
+    data.addColumn('number', 'Num. vistors');
+    Object.keys(vistorsByYear).forEach((year) => {
+      data.addRow([year, vistorsByYear[year]]);
+    });
+
+    const options = {
+      'title': 'Number of visitors each year',
+      'width':600,
+      'height':300
+    };
+
+    const chart = new google.visualization.LineChart(
+        document.getElementById('chart'));
+    chart.draw(data, options);
   });
 }

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** 
 * Input: landmarks defined in file "/WEB-INF/landmarks.csv".
-* Output: JSON array, e.g. [{"lat": 38.4404675, "lng": -122.7144313}]
+* Output: JSON array. E.g. [{"lat": landmark lat, "lng": landmark lng}]
 */
 @WebServlet("/landmarks")
 public class DataServlet extends HttpServlet {
