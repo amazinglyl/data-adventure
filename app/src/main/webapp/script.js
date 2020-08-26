@@ -56,16 +56,17 @@ function addLandmarkToMap(map, landmark) {
  * Charts related functions.
  */
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+google.charts.setOnLoadCallback(drawVistorsChart);
+google.charts.setOnLoadCallback(drawCovid19Chart);
 
-/** Fetches landmark-info and uses it to create a chart. */
-function drawChart() {
-  // Num. visitors chart.
-  drawVistorsChart();
+// /** Fetches landmark-info and uses it to create a chart. */
+// function drawChart() {
+//   // Num. visitors chart.
+//   drawVistorsChart();
 
-  // Covid19 chart
-  drawCovid19Chart();
-}
+//   // Covid19 chart
+//   drawCovid19Chart();
+// }
 
 /** Fetches landmark-info and uses it to create a chart. */
 function drawVistorsChart() {
