@@ -1,6 +1,5 @@
 package com.servlets;
 
-import com.data.Landmark;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -20,12 +19,15 @@ import com.google.cloud.bigquery.QueryJobConfiguration;
 import com.google.cloud.bigquery.TableResult;
 import java.util.UUID;
 
+import java.lang.Exception;
+import java.util.Optional;
+
 /** 
-* Input: landmark info in file "/WEB-INF/landmark-info.csv".
-* Output: a JSON object. E.g. [{"year": 2001, "num. vistors": 50}].
+* Input: query.
+* Output: a JSON object. E.g. [{"temperature": 22.3, "num. cumulative confirmed cases": 100}].
 */
 @WebServlet("/query")
-public class QueryDataServlet extends HttpServlet {
+public class QueryServlet extends HttpServlet {
 
   // A query.
   private final static String query = 
@@ -40,17 +42,21 @@ public class QueryDataServlet extends HttpServlet {
   private LinkedHashMap<Double, Long> confirmedByTemp;
 
   @Override
-  public void init() throws Exception {
+  public void init() {
     confirmedByTemp = new LinkedHashMap<>();
 
     // Run the query.
-    TableResult result = runQuery(query);
-
-    // Save the results to map.
-    for (FieldValueList row : result.getValues()) {
-      String temperature = row.get("temperature").geDoubleValue();
-      long confirmed = row.get("cumulative_confirmed").getLongValue();
-      confirmedByTemp.put(temperature, confirmed);
+    Optional<TableResult> result = runQuery(query);
+    if (result.isPresent()) {
+        // Save the results to map.
+        for (FieldValueList row : result.get().getValues()) {
+        double temperature = row.get("temperature").getDoubleValue();
+        long confirmed = row.get("cumulative_confirmed").getLongValue();
+        confirmedByTemp.put(temperature, confirmed);
+        }
+    } else {
+        // Put a dummy entry into the map.
+        confirmedByTemp.put(Double.valueOf(0.0), Long.valueOf(0));
     }
   }
 
@@ -58,11 +64,12 @@ public class QueryDataServlet extends HttpServlet {
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("application/json");
     Gson gson = new Gson();
-    String json = gson.toJson(vistorsByYear);
+    String json = gson.toJson(confirmedByTemp);
     response.getWriter().println(json);
   }
 
-  private TableResult runQuery(String query) {
+  /* Returns the query results. */
+  private Optional<TableResult> runQuery(String query) {
       BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
     QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
         // Use standard SQL syntax for queries.
@@ -74,17 +81,23 @@ public class QueryDataServlet extends HttpServlet {
     JobId jobId = JobId.of(UUID.randomUUID().toString());
     Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).setJobId(jobId).build());
 
-    // Wait for the query to complete.
-    queryJob = queryJob.waitFor();
+    // Wait for the query job to complete.
+    TableResult queryResult;
+    try {
+        queryJob = queryJob.waitFor();
+        return Optional.of(queryJob.getQueryResults());
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 
     // Check for errors
     if (queryJob == null) {
-    throw new RuntimeException("Job no longer exists");
+        System.err.println("Job no longer exists");
     } else if (queryJob.getStatus().getError() != null) {
-    // You can also look at queryJob.getStatus().getExecutionErrors() for all
-    // errors, not just the latest one.
-    throw new RuntimeException(queryJob.getStatus().getError().toString());
+        // Use queryJob.getStatus().getExecutionErrors() for all
+        // errors, not just the latest one.
+        System.err.println(queryJob.getStatus().getError().toString());
     }
-    return queryJob.getQueryResults();
+    return Optional.empty();
   }
 }

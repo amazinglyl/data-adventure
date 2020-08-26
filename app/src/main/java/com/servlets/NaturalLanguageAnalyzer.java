@@ -25,7 +25,7 @@ public class NaturalLanguageAnalyzer extends HttpServlet {
     Document doc =
         Document.newBuilder().setContent(message).setType(Document.Type.PLAIN_TEXT).build();
     
-    languageService = LanguageServiceClient.create();
+    LanguageServiceClient languageService = LanguageServiceClient.create();
     Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
     float score = sentiment.getScore();
     languageService.close();
