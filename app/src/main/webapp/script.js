@@ -110,6 +110,7 @@ function drawCharts(queryName, tableKey, chartPrefix) {
     const testedData = createTwoColumnDataTable(tableKey, 'New tested');
 
     Object.keys(casesByKey).forEach((key) => {
+      key = Number(key);
       cases = casesByKey[key];
       confirmedData.addRow([key, cases.confirmed]);
       deceasedData.addRow([key, cases.deceased]);
@@ -127,7 +128,7 @@ function drawCharts(queryName, tableKey, chartPrefix) {
 
 function createTwoColumnDataTable(colOneName, colTwoName) {
   const dataTable = new google.visualization.DataTable();
-  dataTable.addColumn('string', colOneName);
+  dataTable.addColumn('number', colOneName);
   dataTable.addColumn('number', colTwoName);
   return dataTable;
 }

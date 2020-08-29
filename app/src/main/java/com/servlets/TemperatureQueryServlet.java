@@ -32,8 +32,7 @@ public class TemperatureQueryServlet extends HttpServlet {
       + "FROM "
       + "  `bigquery-public-data.covid19_open_data.covid19_open_data` "
       + "WHERE date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) "
-      + "GROUP BY 1 "
-      + "ORDER BY 1";
+      + "GROUP BY 1";
     QueryServletHelper helper = new QueryServletHelper();
     casesByTemp = helper.getQueryData(tempQuery);
   }
