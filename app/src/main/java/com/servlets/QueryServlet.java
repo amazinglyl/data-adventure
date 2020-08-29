@@ -21,6 +21,7 @@ import java.util.UUID;
 
 import java.lang.Exception;
 import java.util.Optional;
+import com.google.auth.oauth2.GoogleCredentials;
 
 /** 
 * Input: query.
@@ -29,34 +30,50 @@ import java.util.Optional;
 @WebServlet("/query")
 public class QueryServlet extends HttpServlet {
 
-  // A query.
+  // Query confirmed cases vs temperature.
   private final static String query = 
-    "SELECT"
-    +"  average_temperature_celsius AS temperature,"
-    +"  SUM(cumulative_confirmed) AS cumulative_confirmed"
-    +" FROM `bigquery-public-data.covid19_open_data.covid19_open_data`"
-    +" WHERE date = '2020-08-24'"
-    +" GROUP BY 1";
+    "SELECT "
+    +"  average_temperature_celsius AS temperature, "
+    +"  SUM(cumulative_confirmed) AS cumulative_confirmed "
+    +"FROM `bigquery-public-data.covid19_open_data.covid19_open_data` "
+    +"WHERE date = '2020-08-24' "
+    +"GROUP BY 1";
 
     // A map of <temperature, num. cumulative confirmed cases>.
-  private LinkedHashMap<Double, Long> confirmedByTemp;
+  private LinkedHashMap<Integer, Integer> confirmedByTemp;
 
   @Override
   public void init() {
     confirmedByTemp = new LinkedHashMap<>();
 
     // Run the query.
+    System.out.println("Run the query ... ");
     Optional<TableResult> result = runQuery(query);
     if (result.isPresent()) {
         // Save the results to map.
-        for (FieldValueList row : result.get().getValues()) {
-        double temperature = row.get("temperature").getDoubleValue();
-        long confirmed = row.get("cumulative_confirmed").getLongValue();
-        confirmedByTemp.put(temperature, confirmed);
+        Iterable<FieldValueList> values = result.get().iterateAll();
+        System.out.println("Is query result null: " + (values == null));
+        for (FieldValueList row : values) {
+            double temperature = 0.0;
+            // If temperature = null, no need to save this data.
+            if(row.get("temperature").isNull()) {
+                continue;
+            }
+            else {
+                temperature = row.get("temperature").getDoubleValue();
+            }
+
+            long confirmed = 0;
+            // If cumulative_confirmed = null, treat is as 0.
+            if(!row.get("cumulative_confirmed").isNull()) {
+                confirmed = row.get("cumulative_confirmed").getLongValue();
+            }
+            confirmedByTemp.put((int)Math.round(temperature), (int)confirmed);
         }
     } else {
-        // Put a dummy entry into the map.
-        confirmedByTemp.put(Double.valueOf(0.0), Long.valueOf(0));
+        // Put some dummy data into the map.
+        confirmedByTemp.put(0, 0);
+        confirmedByTemp.put(1, 2);
     }
   }
 
@@ -70,33 +87,31 @@ public class QueryServlet extends HttpServlet {
 
   /* Returns the query results. */
   private Optional<TableResult> runQuery(String query) {
-      BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
+    // Create a BigQuery instance.
+    BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();
     QueryJobConfiguration queryConfig = QueryJobConfiguration.newBuilder(query)
-        // Use standard SQL syntax for queries.
-        // See: https://cloud.google.com/bigquery/sql-reference/
+        // Use standard SQL syntax for queries. See: https://cloud.google.com/bigquery/sql-reference/
         .setUseLegacySql(false)
         .build();
     
-    // Create a job ID so that we can safely retry.
+    // Create a job ID.
     JobId jobId = JobId.of(UUID.randomUUID().toString());
     Job queryJob = bigquery.create(JobInfo.newBuilder(queryConfig).setJobId(jobId).build());
 
-    // Wait for the query job to complete.
     TableResult queryResult;
     try {
+        // Wait for the job to complete.
         queryJob = queryJob.waitFor();
         return Optional.of(queryJob.getQueryResults());
     } catch (Exception e) {
         e.printStackTrace();
-    }
-
-    // Check for errors
-    if (queryJob == null) {
-        System.err.println("Job no longer exists");
-    } else if (queryJob.getStatus().getError() != null) {
-        // Use queryJob.getStatus().getExecutionErrors() for all
-        // errors, not just the latest one.
-        System.err.println(queryJob.getStatus().getError().toString());
+        // Log errors.
+        if (queryJob == null) {
+            System.err.println("The query job no longer exists!");
+        } else if (queryJob.getStatus().getError() != null) {
+            // Log the the latest error. Use queryJob.getStatus().getExecutionErrors() to log all errors.
+            System.err.println("The query job has error: " + queryJob.getStatus().getError().toString());
+        }
     }
     return Optional.empty();
   }

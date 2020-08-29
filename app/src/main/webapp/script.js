@@ -56,7 +56,7 @@ function addLandmarkToMap(map, landmark) {
  * Charts related functions.
  */
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawVistorsChart);
+// google.charts.setOnLoadCallback(drawVistorsChart);
 google.charts.setOnLoadCallback(drawCovid19Chart);
 
 // /** Fetches landmark-info and uses it to create a chart. */
@@ -97,7 +97,7 @@ function drawCovid19Chart() {
   fetch('/query').then(response => response.json())
   .then((confirmedByTemp) => {
     const data = new google.visualization.DataTable();
-    data.addColumn('number', 'Temperature');
+    data.addColumn('string', 'Temperature');
     data.addColumn('number', 'Cumulative confirmed');
     Object.keys(confirmedByTemp).forEach((temp) => {
       data.addRow([temp, confirmedByTemp[temp]]);
@@ -110,7 +110,7 @@ function drawCovid19Chart() {
     };
 
     const chart = new google.visualization.LineChart(
-        document.getElementById('chart'));
+        document.getElementById('covid19-chart'));
     chart.draw(data, options);
   });
 }
