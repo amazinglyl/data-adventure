@@ -1,5 +1,6 @@
 package com.servlets;
 
+import com.data.Cases;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -24,68 +25,54 @@ import java.util.Optional;
 import com.google.auth.oauth2.GoogleCredentials;
 
 /** 
-* Input: query.
-* Output: a JSON object. E.g. [{"temperature": 22.3, "num. cumulative confirmed cases": 100}].
-*/
-@WebServlet("/query")
-public class QueryServlet extends HttpServlet {
+ * This is a help class to query the database and save the data in a map.
+ * Input: query.
+ * Output: A map of <Key, num. cases>.
+ */
+public class QueryServletHelper {
 
-  // Query confirmed cases vs temperature.
-  private final static String query = 
-    "SELECT "
-    +"  average_temperature_celsius AS temperature, "
-    +"  SUM(cumulative_confirmed) AS cumulative_confirmed "
-    +"FROM `bigquery-public-data.covid19_open_data.covid19_open_data` "
-    +"WHERE date = '2020-08-24' "
-    +"GROUP BY 1";
-
-    // A map of <temperature, num. cumulative confirmed cases>.
-  private LinkedHashMap<Integer, Integer> confirmedByTemp;
-
-  @Override
-  public void init() {
-    confirmedByTemp = new LinkedHashMap<>();
-
+  // Runs the query and saves the query result into a map.
+  public LinkedHashMap<Long, Cases> getQueryData (String query) {
+    LinkedHashMap<Long, Cases> keyedCases = new LinkedHashMap<>();
     // Run the query.
-    System.out.println("Run the query ... ");
     Optional<TableResult> result = runQuery(query);
     if (result.isPresent()) {
-        // Save the results to map.
-        Iterable<FieldValueList> values = result.get().iterateAll();
-        System.out.println("Is query result null: " + (values == null));
-        for (FieldValueList row : values) {
-            double temperature = 0.0;
-            // If temperature = null, no need to save this data.
-            if(row.get("temperature").isNull()) {
-                continue;
-            }
-            else {
-                temperature = row.get("temperature").getDoubleValue();
-            }
+      processQueryResults(result.get(), keyedCases);
+    } 
+    return keyedCases;
+  }
 
-            long confirmed = 0;
-            // If cumulative_confirmed = null, treat is as 0.
-            if(!row.get("cumulative_confirmed").isNull()) {
-                confirmed = row.get("cumulative_confirmed").getLongValue();
-            }
-            confirmedByTemp.put((int)Math.round(temperature), (int)confirmed);
+  // Saves the query results to the keyedCases map.
+  private void processQueryResults(TableResult result, LinkedHashMap<Long, Cases> keyedCases) {
+    for (FieldValueList row : result.iterateAll()) {
+        long temperature = 0;
+        // If temperature = null, no need to save this data.
+        if(row.get("temperature").isNull()) {
+            continue;
         }
-    } else {
-        // Put some dummy data into the map.
-        confirmedByTemp.put(0, 0);
-        confirmedByTemp.put(1, 2);
+        else {
+            temperature = row.get("temperature").getLongValue();
+        }
+
+        long confirmed = 0, deceased = 0, recovered = 0, tested = 0;
+        // If new cases = null, treat them as 0.
+        if(!row.get("new_confirmed").isNull()) {
+            confirmed = row.get("new_confirmed").getLongValue();
+        }
+        if(!row.get("new_deceased").isNull()) {
+            deceased = row.get("new_deceased").getLongValue();
+        }
+        if(!row.get("new_recovered").isNull()) {
+            recovered = row.get("new_recovered").getLongValue();
+        }
+        if(!row.get("new_tested").isNull()) {
+            tested = row.get("new_tested").getLongValue();
+        }
+        keyedCases.put(temperature, new Cases(confirmed, deceased, recovered, tested));
     }
   }
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("application/json");
-    Gson gson = new Gson();
-    String json = gson.toJson(confirmedByTemp);
-    response.getWriter().println(json);
-  }
-
-  /* Returns the query results. */
+  /* Runs the query and returns the query results. If there are errors, nothing will be returned. */
   private Optional<TableResult> runQuery(String query) {
     // Create a BigQuery instance.
     BigQuery bigquery = BigQueryOptions.getDefaultInstance().getService();

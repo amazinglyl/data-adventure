@@ -94,23 +94,51 @@ function drawVistorsChart() {
 
 /** Covid19 charts. */
 function drawCovid19Chart() {
-  fetch('/query').then(response => response.json())
-  .then((confirmedByTemp) => {
-    const data = new google.visualization.DataTable();
-    data.addColumn('string', 'Temperature');
-    data.addColumn('number', 'Cumulative confirmed');
-    Object.keys(confirmedByTemp).forEach((temp) => {
-      data.addRow([temp, confirmedByTemp[temp]]);
+  fetch('/temperature-query').then(response => response.json())
+  .then((casesByTemp) => {
+    
+    // Confirmed
+    const confirmedData = new google.visualization.DataTable();
+    confirmedData.addColumn('string', 'Temperature');
+    confirmedData.addColumn('number', ' New confirmed');
+    // Deceased
+    const deceasedData = new google.visualization.DataTable();
+    deceasedData.addColumn('string', 'Temperature');
+    deceasedData.addColumn('number', ' New deceased');
+    // Recovered
+    const recoveredData = new google.visualization.DataTable();
+    recoveredData.addColumn('string', 'Temperature');
+    recoveredData.addColumn('number', ' New recovered');
+    // Tested
+    const testedData = new google.visualization.DataTable();
+    testedData.addColumn('string', 'Temperature');
+    testedData.addColumn('number', ' New tested');
+
+    Object.keys(casesByTemp).forEach((temp) => {
+      cases = casesByTemp[temp];
+      confirmedData.addRow([temp, cases.confirmed]);
+      deceasedData.addRow([temp, cases.deceased]);
+      recoveredData.addRow([temp, cases.recovered]);
+      testedData.addRow([temp, cases.tested]);
     });
 
-    const options = {
-      'title': 'Number of cumalative confirmed cases per temperature',
-      'width':600,
+    // Create charts.
+    createLineChart(confirmedData, 'Num. confirmed cases in the past one week', 'temp-confirmed');
+    createLineChart(deceasedData, 'Num. deceased cases in the past one week', 'temp-deceased');
+    createLineChart(recoveredData, 'Num. recovered cases in the past one week', 'temp-recovered');
+    createLineChart(testedData, 'Num. tested cases in the past one week', 'temp-tested');
+  });
+}
+
+function createLineChart(data, title, name) {
+  const options = {
+      'legend':'none',
+      'title': title,
+      'width': 600,
       'height':300
     };
 
-    const chart = new google.visualization.LineChart(
-        document.getElementById('covid19-chart'));
-    chart.draw(data, options);
-  });
+  const chart = new google.visualization.LineChart(
+        document.getElementById(name));
+  chart.draw(data, options);
 }
