@@ -94,12 +94,12 @@ function drawVistorsChart() {
 
 /** Covid19 charts. */
 function drawCovid19Chart() {
-  drawCharts ('/temperature-query', 'Temperature', 'temp');
-  drawCharts ('/latitude-query', 'Latitude', 'latitude');
+  drawCharts ('/temperature-query', 'Temperature', 'temperature (celsius)', 'temp');
+  drawCharts ('/latitude-query', 'Latitude', 'latitude', 'latitude');
 }
 
 // Draw charts for the data from the given queryName.
-function drawCharts(queryName, tableKey, chartPrefix) {
+function drawCharts(queryName, tableKey, hAxisTitle, chartPrefix) {
   fetch(queryName).then(response => response.json())
   .then((casesByKey) => {
     
@@ -119,10 +119,10 @@ function drawCharts(queryName, tableKey, chartPrefix) {
     });
 
     // Create charts.
-    createLineChart(confirmedData, 'Num. confirmed cases in the past one week', chartPrefix + '-confirmed');
-    createLineChart(deceasedData, 'Num. deceased cases in the past one week', chartPrefix + '-deceased');
-    createLineChart(recoveredData, 'Num. recovered cases in the past one week', chartPrefix + '-recovered');
-    createLineChart(testedData, 'Num. tested cases in the past one week', chartPrefix + '-tested');
+    createLineChart(confirmedData, 'confirmed', hAxisTitle, chartPrefix + '-confirmed');
+    createLineChart(deceasedData, 'deceased', hAxisTitle, chartPrefix + '-deceased');
+    createLineChart(recoveredData, 'recovered', hAxisTitle, chartPrefix + '-recovered');
+    createLineChart(testedData, 'tested', hAxisTitle, chartPrefix + '-tested');
   });
 }
 
@@ -133,12 +133,18 @@ function createTwoColumnDataTable(colOneName, colTwoName) {
   return dataTable;
 }
 
-function createLineChart(data, title, name) {
+function createLineChart(data, title, hAxisTitle, name) {
   const options = {
-      'legend':'none',
-      'title': title,
-      'width': 600,
-      'height':300
+      legend:'none',
+      title: title,
+      width: 600,
+      height: 300,
+      hAxis : {
+        title: hAxisTitle,
+      },
+      vAxis : {
+        title: 'Num. cases',
+      }
     };
 
   const chart = new google.visualization.LineChart(

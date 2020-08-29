@@ -33,7 +33,8 @@ public class LatitudeQueryServlet extends HttpServlet {
       + "FROM "
       + "  `bigquery-public-data.covid19_open_data.covid19_open_data` "
       + "WHERE date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) "
-      + "GROUP BY 1";;
+      + "GROUP BY 1 "
+      + "ORDER BY 1"; // Need to order the data so that they are connected in order in the line charts.
     QueryServletHelper helper = new QueryServletHelper();
     casesByLatitude = helper.getQueryData(atitudeQuery);
   }
