@@ -68,7 +68,7 @@
         <version>2.2.0</version>
         <configuration>
           <!-- A project id created from Google cloud platform. -->
-          <deploy.projectId>sample-java-project-287504</deploy.projectId>
+          <deploy.projectId>lyl-cloud</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
