@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Test Google Maps API</title>
-  <!-- TODO: make api key private to avoid key theft. -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrcviYx9sg6F5vI9VHkx_aYt0PLlAVt6U"></script>
+  <title>Lyl cloud project</title>
   <!-- Charts -->
   <script src="https://www.gstatic.com/charts/loader.js?"></script>
   <script src="script.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body onload="createMap();">
-  <h1>Hello Sydney!</h1>
-  <!-- Map -->
-  <div id="map"></div>
-  <p>This is a Map for the city of Sydney!</p>
+  <h1>Covid-19 dashboards</h1>
   
-  <!-- Chart -->
-  <!-- <div id="chart"></div> -->
-
+  <!-- Charts -->
   <p> The figure below shows the total number of cases in the past one week as a function of temperature or latitude.</p>
   <table class="columns">
     <tr>
@@ -44,13 +37,13 @@
 
   <!-- Sentiment -->
   <h1>Sentiment Analysis</h1>
-    <p>Type a message and click submit to analyze its sentiment:</p>
+  <p>Type a message and click submit to analyze its sentiment:</p>
 
-    <form method="POST" action="/sentiment">
-        <textarea name="message"></textarea>
-        <br/>
-        <button>Submit</button>
-    </form>
+  <form method="POST" action="/sentiment">
+      <textarea name="message"></textarea>
+      <br/>
+      <button>Submit</button>
+  </form>
 
 </body>
 </html>
