@@ -30,7 +30,6 @@ function createMap() {
             addLandmarkToMap(map, landmark)
         });
     });  
-
 }
 
 /** For landscapes, add a marker that shows an info window when clicked. */

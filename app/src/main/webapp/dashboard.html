@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Data Adventure - Dashboards</title>
+  <!-- Charts -->
+  <script src="https://www.gstatic.com/charts/loader.js?"></script>
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+</head>
+<body>
+  <script src="navbar.js"></script>
+
+  <h1>Covid-19 dashboards</h1>
+
+  <!-- Charts -->
+  <p> The figure below shows the total number of cases in the past one week as a function of temperature or latitude.</p>
+  <table class="columns">
+    <tr>
+      <td><div id="temp-column" style="text-align: center">Temperature</div></td>
+      <td><div id="latitude-column" style="text-align: center">Latitude</div></td>
+    </tr>
+    <tr>
+      <td><div id="temp-confirmed" style="border: 1px solid #ccc"></div></td>
+      <td><div id="latitude-confirmed" style="border: 1px solid #ccc"></div></td>
+    </tr>
+    <tr>
+      <td><div id="temp-deceased" style="border: 1px solid #ccc"></div></td>
+      <td><div id="latitude-deceased" style="border: 1px solid #ccc"></div></td>
+    </tr>
+    <tr>
+      <td><div id="temp-recovered" style="border: 1px solid #ccc"></div></td>
+      <td><div id="latitude-recovered" style="border: 1px solid #ccc"></div></td>
+    </tr>
+    <tr>
+      <td><div id="temp-tested" style="border: 1px solid #ccc"></div></td>
+      <td><div id="latitude-tested" style="border: 1px solid #ccc"></div></td>
+    </tr>
+  </table>
+
+  <!-- Sentiment -->
+  <h1>Sentiment Analysis</h1>
+  <p>Type a message and click submit to analyze its sentiment:</p>
+
+  <form method="POST" action="/sentiment">
+      <textarea name="message"></textarea>
+      <br/>
+      <button>Submit</button>
+  </form>
+
+</body>
+</html>
