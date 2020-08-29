@@ -56,10 +56,21 @@ function addLandmarkToMap(map, landmark) {
  * Charts related functions.
  */
 google.charts.load('current', {'packages':['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+// google.charts.setOnLoadCallback(drawVistorsChart);
+google.charts.setOnLoadCallback(drawCovid19Chart);
+
+// /** Fetches landmark-info and uses it to create a chart. */
+// function drawChart() {
+//   // Num. visitors chart.
+//   drawVistorsChart();
+
+//   // Covid19 chart
+//   drawCovid19Chart();
+// }
 
 /** Fetches landmark-info and uses it to create a chart. */
-function drawChart() {
+function drawVistorsChart() {
+  // Num. visitors chart.
   fetch('/landmark-info').then(response => response.json())
   .then((vistorsByYear) => {
     const data = new google.visualization.DataTable();
@@ -77,6 +88,29 @@ function drawChart() {
 
     const chart = new google.visualization.LineChart(
         document.getElementById('chart'));
+    chart.draw(data, options);
+  });
+}
+
+/** Covid19 charts. */
+function drawCovid19Chart() {
+  fetch('/query').then(response => response.json())
+  .then((confirmedByTemp) => {
+    const data = new google.visualization.DataTable();
+    data.addColumn('string', 'Temperature');
+    data.addColumn('number', 'Cumulative confirmed');
+    Object.keys(confirmedByTemp).forEach((temp) => {
+      data.addRow([temp, confirmedByTemp[temp]]);
+    });
+
+    const options = {
+      'title': 'Number of cumalative confirmed cases per temperature',
+      'width':600,
+      'height':300
+    };
+
+    const chart = new google.visualization.LineChart(
+        document.getElementById('covid19-chart'));
     chart.draw(data, options);
   });
 }

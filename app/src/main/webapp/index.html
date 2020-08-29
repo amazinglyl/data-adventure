@@ -5,7 +5,7 @@
   <!-- TODO: make api key private to avoid key theft. -->
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrcviYx9sg6F5vI9VHkx_aYt0PLlAVt6U"></script>
   <!-- Charts -->
-  <script src="https://www.gstatic.com/charts/loader.js?key=AIzaSyCrcviYx9sg6F5vI9VHkx_aYt0PLlAVt6U"></script>
+  <script src="https://www.gstatic.com/charts/loader.js?"></script>
   <script src="script.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -16,6 +16,19 @@
   <p>This is a Map for the city of Sydney!</p>
   
   <!-- Chart -->
-  <div id="chart"></div>
+  <!-- <div id="chart"></div> -->
+
+  <div id="covid19-chart"></div>
+
+  <!-- Sentiment -->
+  <h1>Sentiment Analysis</h1>
+    <p>Type a message and click submit to analyze its sentiment:</p>
+
+    <form method="POST" action="/sentiment">
+        <textarea name="message"></textarea>
+        <br/>
+        <button>Submit</button>
+    </form>
+
 </body>
 </html>
