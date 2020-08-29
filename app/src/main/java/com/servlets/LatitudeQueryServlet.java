@@ -25,7 +25,7 @@ public class LatitudeQueryServlet extends HttpServlet {
     // Query cases vs temperature for the last one week.
     String atitudeQuery = 
       "SELECT "
-      + "  CAST(ROUND(latitude) AS INT64) AS latitude, "
+      + "  CAST(ROUND(latitude) AS INT64) AS key, "
       + "  SUM(new_confirmed) AS new_confirmed, "
       + "  SUM(new_deceased) AS new_deceased, "
       + "  SUM(new_recovered) AS new_recovered, "

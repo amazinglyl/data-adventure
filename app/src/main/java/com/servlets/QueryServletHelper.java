@@ -40,11 +40,11 @@ public class QueryServletHelper {
     for (FieldValueList row : result.iterateAll()) {
         long temperature = 0;
         // If temperature = null, no need to save this data.
-        if(row.get("temperature").isNull()) {
+        if(row.get("key").isNull()) {
             continue;
         }
         else {
-            temperature = row.get("temperature").getLongValue();
+            temperature = row.get("key").getLongValue();
         }
 
         long confirmed = 0, deceased = 0, recovered = 0, tested = 0;

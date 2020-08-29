@@ -94,40 +94,42 @@ function drawVistorsChart() {
 
 /** Covid19 charts. */
 function drawCovid19Chart() {
-  fetch('/temperature-query').then(response => response.json())
-  .then((casesByTemp) => {
-    
-    // Confirmed
-    const confirmedData = new google.visualization.DataTable();
-    confirmedData.addColumn('string', 'Temperature');
-    confirmedData.addColumn('number', ' New confirmed');
-    // Deceased
-    const deceasedData = new google.visualization.DataTable();
-    deceasedData.addColumn('string', 'Temperature');
-    deceasedData.addColumn('number', ' New deceased');
-    // Recovered
-    const recoveredData = new google.visualization.DataTable();
-    recoveredData.addColumn('string', 'Temperature');
-    recoveredData.addColumn('number', ' New recovered');
-    // Tested
-    const testedData = new google.visualization.DataTable();
-    testedData.addColumn('string', 'Temperature');
-    testedData.addColumn('number', ' New tested');
+  drawCharts ('/temperature-query', 'Temperature', 'temp');
+  drawCharts ('/latitude-query', 'Latitude', 'latitude');
+}
 
-    Object.keys(casesByTemp).forEach((temp) => {
-      cases = casesByTemp[temp];
-      confirmedData.addRow([temp, cases.confirmed]);
-      deceasedData.addRow([temp, cases.deceased]);
-      recoveredData.addRow([temp, cases.recovered]);
-      testedData.addRow([temp, cases.tested]);
+// Draw charts for the data from the given queryName.
+function drawCharts(queryName, tableKey, chartPrefix) {
+  fetch(queryName).then(response => response.json())
+  .then((casesByKey) => {
+    
+    // Create data tables.
+    const confirmedData = createTwoColumnDataTable(tableKey, 'New confirmed');
+    const deceasedData = createTwoColumnDataTable(tableKey,  'New deceased');
+    const recoveredData = createTwoColumnDataTable(tableKey, 'New recovered');
+    const testedData = createTwoColumnDataTable(tableKey, 'New tested');
+
+    Object.keys(casesByKey).forEach((key) => {
+      cases = casesByKey[key];
+      confirmedData.addRow([key, cases.confirmed]);
+      deceasedData.addRow([key, cases.deceased]);
+      recoveredData.addRow([key, cases.recovered]);
+      testedData.addRow([key, cases.tested]);
     });
 
     // Create charts.
-    createLineChart(confirmedData, 'Num. confirmed cases in the past one week', 'temp-confirmed');
-    createLineChart(deceasedData, 'Num. deceased cases in the past one week', 'temp-deceased');
-    createLineChart(recoveredData, 'Num. recovered cases in the past one week', 'temp-recovered');
-    createLineChart(testedData, 'Num. tested cases in the past one week', 'temp-tested');
+    createLineChart(confirmedData, 'Num. confirmed cases in the past one week', chartPrefix + '-confirmed');
+    createLineChart(deceasedData, 'Num. deceased cases in the past one week', chartPrefix + '-deceased');
+    createLineChart(recoveredData, 'Num. recovered cases in the past one week', chartPrefix + '-recovered');
+    createLineChart(testedData, 'Num. tested cases in the past one week', chartPrefix + '-tested');
   });
+}
+
+function createTwoColumnDataTable(colOneName, colTwoName) {
+  const dataTable = new google.visualization.DataTable();
+  dataTable.addColumn('string', colOneName);
+  dataTable.addColumn('number', colTwoName);
+  return dataTable;
 }
 
 function createLineChart(data, title, name) {

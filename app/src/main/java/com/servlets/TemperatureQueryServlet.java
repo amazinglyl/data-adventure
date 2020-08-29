@@ -24,7 +24,7 @@ public class TemperatureQueryServlet extends HttpServlet {
     // Query cases vs temperature for the last one week.
     String tempQuery = 
       "SELECT "
-      + "  CAST(ROUND(average_temperature_celsius) AS INT64) AS temperature, "
+      + "  CAST(ROUND(average_temperature_celsius) AS INT64) AS key, "
       + "  SUM(new_confirmed) AS new_confirmed, "
       + "  SUM(new_deceased) AS new_deceased, "
       + "  SUM(new_recovered) AS new_recovered, "
