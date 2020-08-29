@@ -2,13 +2,7 @@ package com.servlets;
 
 import com.data.Cases;
 import com.google.gson.Gson;
-import java.io.IOException;
 import java.util.LinkedHashMap;
-import java.util.Scanner;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.google.cloud.bigquery.BigQuery;
 import com.google.cloud.bigquery.BigQueryOptions;
@@ -22,7 +16,6 @@ import java.util.UUID;
 
 import java.lang.Exception;
 import java.util.Optional;
-import com.google.auth.oauth2.GoogleCredentials;
 
 /** 
  * This is a help class to query the database and save the data in a map.
