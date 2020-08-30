@@ -5,7 +5,7 @@
 
   <groupId>com.java</groupId>
   <!-- TODO: rename artifactId -->
-  <artifactId>maps-hello-world</artifactId>
+  <artifactId>lyl-cloud-project</artifactId>
   <version>1</version>
   <packaging>war</packaging>
 

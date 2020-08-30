@@ -29,7 +29,7 @@ public class DataServlet extends HttpServlet {
     Scanner scanner = new Scanner(getServletContext().getResourceAsStream("/WEB-INF/landmarks.csv"));
     while (scanner.hasNextLine()) {
       String line = scanner.nextLine();
-      String[] landmark = line.split(", ");
+      String[] landmark = line.split("   ");  // Separator is triple whitespaces.
 
       landmarks.add(new Landmark(
         /*lat=*/Double.parseDouble(landmark[0]),

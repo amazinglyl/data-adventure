@@ -1,6 +1,6 @@
 package com.data;
 
-/** A landmark, represented by its lat and lng coordinates. */
+/** A landmark, represented by its lat and lng coordinates (or optionally title and description). */
 public class Landmark {
   private double lat;
   private double lng;
