@@ -1,7 +1,7 @@
 /**
  * Charts related functions.
  */
-google.charts.load('current', {'packages':['corechart']});
+google.charts.load('current', {'packages':['corechart', 'controls']});
 // google.charts.setOnLoadCallback(drawVistorsChart);
 google.charts.setOnLoadCallback(drawCovid19Chart);
 
@@ -31,9 +31,52 @@ function drawVistorsChart() {
 
 /** Covid19 charts. */
 function drawCovid19Chart() {
-  drawCharts ('/temperature-query', 'Temperature', 'temperature (celsius)', 'temp');
-  drawCharts ('/latitude-query', 'Latitude', 'latitude', 'latitude');
+  drawTotalConfirmedDashboard('/temperature-total-query', 'Temperature', 'temperature (celsius)', 'temp');
+  drawTotalConfirmedDashboard('/latitude-total-query', 'Latitude', 'latitude', 'latitude');
+  drawCharts('/temperature-query', 'Temperature', 'temperature (celsius)', 'temp');
+  drawCharts('/latitude-query', 'Latitude', 'latitude', 'latitude');
 }
+
+// Draw dashboard for total confirmed
+function drawTotalConfirmedDashboard(queryName, tableKey, hAxisTitle, chartPrefix) {
+  fetch(queryName).then(response => response.json())
+  .then((casesByKey) => {
+    
+    // Create data tables.
+    const data = createTwoColumnDataTable(tableKey, 'Total confirmed');
+   
+    Object.keys(casesByKey).forEach((key) => {
+      key = Number(key);
+      cases = casesByKey[key];
+      data.addRow([key, cases.confirmed]);
+    });
+
+    // Create a dashboard.
+    var dashboard = new google.visualization.Dashboard(
+        document.getElementById(chartPrefix + '-dashboard'));
+
+    // Create a range slider, passing some options
+    var keyRangeSlider = new google.visualization.ControlWrapper({
+      'controlType': 'NumberRangeFilter',
+      'containerId': chartPrefix + '-total-confirmed-filter',
+      'options': {
+        'filterColumnLabel': tableKey
+      }
+    });
+
+    // Create a line chart, passing some options.
+    const dashboardOptions = createOptions('Total confirmed', hAxisTitle)
+    var lineChart = new google.visualization.ChartWrapper({
+      chartType: 'LineChart',
+      containerId: chartPrefix + '-total-confirmed-dash',
+      options: dashboardOptions
+    });
+
+    dashboard.bind(keyRangeSlider, lineChart);
+    dashboard.draw(data);
+  });
+}
+
 
 // Draw charts for the data from the given queryName.
 function drawCharts(queryName, tableKey, hAxisTitle, chartPrefix) {
@@ -71,7 +114,15 @@ function createTwoColumnDataTable(colOneName, colTwoName) {
 }
 
 function createLineChart(data, title, hAxisTitle, name) {
-  const options = {
+  const options = createOptions(title, hAxisTitle);
+
+  const chart = new google.visualization.LineChart(
+        document.getElementById(name));
+  chart.draw(data, options);
+}
+
+function createOptions(title, hAxisTitle) {
+  return {
       legend:'none',
       title: title,
       width: 600,
@@ -83,8 +134,4 @@ function createLineChart(data, title, hAxisTitle, name) {
         title: 'Num. cases',
       }
     };
-
-  const chart = new google.visualization.LineChart(
-        document.getElementById(name));
-  chart.draw(data, options);
 }

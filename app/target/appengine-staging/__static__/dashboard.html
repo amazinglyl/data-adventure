@@ -12,42 +12,75 @@
 <body>
   <script src="navbar.js"></script>
 
-  <h1>Covid-19 dashboards</h1>
+  <div class="container">
 
-  <!-- Charts -->
-  <p> The figure below shows the total number of cases in the past one week as a function of temperature or latitude.</p>
-  <table class="columns">
-    <tr>
-      <td><div id="temp-column" style="text-align: center">Temperature</div></td>
-      <td><div id="latitude-column" style="text-align: center">Latitude</div></td>
-    </tr>
-    <tr>
-      <td><div id="temp-confirmed" style="border: 1px solid #ccc"></div></td>
-      <td><div id="latitude-confirmed" style="border: 1px solid #ccc"></div></td>
-    </tr>
-    <tr>
-      <td><div id="temp-deceased" style="border: 1px solid #ccc"></div></td>
-      <td><div id="latitude-deceased" style="border: 1px solid #ccc"></div></td>
-    </tr>
-    <tr>
-      <td><div id="temp-recovered" style="border: 1px solid #ccc"></div></td>
-      <td><div id="latitude-recovered" style="border: 1px solid #ccc"></div></td>
-    </tr>
-    <tr>
-      <td><div id="temp-tested" style="border: 1px solid #ccc"></div></td>
-      <td><div id="latitude-tested" style="border: 1px solid #ccc"></div></td>
-    </tr>
-  </table>
+    <h1>Covid-19 dashboards</h1>
 
-  <!-- Sentiment -->
-  <!-- <h1>Sentiment Analysis</h1>
-  <p>Type a message and click submit to analyze its sentiment:</p>
+    <br/>
 
-  <form method="POST" action="/sentiment">
-      <textarea name="message"></textarea>
-      <br/>
-      <button>Submit</button>
-  </form> -->
+    <h3>Cumulative cases</h3>
+    <p> The figures below show the total number of cumulative cases (2 days ago) as a function of temperature or latitude.</p>
+    <div id="dashboard">
+      <table class="columns">
+        <tr>
+          <td>
+            <div id = "temp-dashboard" style="border: 1px solid #ccc">
+              <div id="temp-total-confirmed-filter"></div>
+              <div id="temp-total-confirmed-dash"></div>
+            </div>
+          </td>
+          <td>
+            <div id = "latitude-dashboard" style="border: 1px solid #ccc">
+              <div id="latitude-total-confirmed-filter"></div>
+              <div id="latitude-total-confirmed-dash"></div>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <br/>
+
+    <!-- Charts -->
+    <div id="charts">
+      <h3>New cases</h3>
+      <p> The figures below show the total number of new cases in the past one week as a function of temperature or latitude.</p>
+      <table class="columns">
+        <tr>
+          <td><div id="temp-column" style="text-align: center">Temperature</div></td>
+          <td><div id="latitude-column" style="text-align: center">Latitude</div></td>
+        </tr>
+        <tr>
+          <td><div id="temp-confirmed" style="border: 1px solid #ccc"></div></td>
+          <td><div id="latitude-confirmed" style="border: 1px solid #ccc"></div></td>
+        </tr>
+        <tr>
+          <td><div id="temp-deceased" style="border: 1px solid #ccc"></div></td>
+          <td><div id="latitude-deceased" style="border: 1px solid #ccc"></div></td>
+        </tr>
+        <tr>
+          <td><div id="temp-recovered" style="border: 1px solid #ccc"></div></td>
+          <td><div id="latitude-recovered" style="border: 1px solid #ccc"></div></td>
+        </tr>
+        <tr>
+          <td><div id="temp-tested" style="border: 1px solid #ccc"></div></td>
+          <td><div id="latitude-tested" style="border: 1px solid #ccc"></div></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Sentiment -->
+    <!-- <h1>Sentiment Analysis</h1>
+    <p>Type a message and click submit to analyze its sentiment:</p>
+
+    <form method="POST" action="/sentiment">
+        <textarea name="message"></textarea>
+        <br/>
+        <button>Submit</button>
+    </form> -->
+  </div>
+
+  <div style="margin-top:200px;"></div>
 
 </body>
 </html>

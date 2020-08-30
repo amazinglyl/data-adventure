@@ -39,6 +39,10 @@ handlers:
   script: unused
   login: optional
   secure: optional
+- url: /temperature-total-query
+  script: unused
+  login: optional
+  secure: optional
 - url: /delete-task
   script: unused
   login: optional
@@ -48,6 +52,10 @@ handlers:
   login: optional
   secure: optional
 - url: /my-data-url
+  script: unused
+  login: optional
+  secure: optional
+- url: /latitude-total-query
   script: unused
   login: optional
   secure: optional

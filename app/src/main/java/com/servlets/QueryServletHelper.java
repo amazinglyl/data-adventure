@@ -38,30 +38,34 @@ public class QueryServletHelper {
   // Saves the query results to the keyedCases map.
   private void processQueryResults(TableResult result, LinkedHashMap<Long, Cases> keyedCases) {
     for (FieldValueList row : result.iterateAll()) {
-        long temperature = 0;
-        // If temperature = null, no need to save this data.
-        if(row.get("key").isNull()) {
-            continue;
-        }
-        else {
-            temperature = row.get("key").getLongValue();
-        }
+      int size = row.size();
+      if(size == 0) {
+        return;
+      }
+      long key = 0;
+      // If key = null, no need to save this data.
+      if(row.get("key").isNull()) {
+          continue;
+      }
+      else {
+          key = row.get("key").getLongValue();
+      }
 
-        long confirmed = 0, deceased = 0, recovered = 0, tested = 0;
-        // If new cases = null, treat them as 0.
-        if(!row.get("new_confirmed").isNull()) {
-            confirmed = row.get("new_confirmed").getLongValue();
-        }
-        if(!row.get("new_deceased").isNull()) {
-            deceased = row.get("new_deceased").getLongValue();
-        }
-        if(!row.get("new_recovered").isNull()) {
-            recovered = row.get("new_recovered").getLongValue();
-        }
-        if(!row.get("new_tested").isNull()) {
-            tested = row.get("new_tested").getLongValue();
-        }
-        keyedCases.put(temperature, new Cases(confirmed, deceased, recovered, tested));
+      long confirmed = 0, deceased = 0, recovered = 0, tested = 0;
+      // If new cases = null, treat them as 0.
+      if(size >= 2 && !row.get("confirmed").isNull()) {
+          confirmed = row.get("confirmed").getLongValue();
+      }
+      if(size >= 3 && !row.get("deceased").isNull()) {
+          deceased = row.get("deceased").getLongValue();
+      }
+      if(size >= 4 && !row.get("recovered").isNull()) {
+          recovered = row.get("recovered").getLongValue();
+      }
+      if(size >= 5 && !row.get("tested").isNull()) {
+          tested = row.get("tested").getLongValue();
+      }
+      keyedCases.put(key, new Cases(confirmed, deceased, recovered, tested));
     }
   }
 

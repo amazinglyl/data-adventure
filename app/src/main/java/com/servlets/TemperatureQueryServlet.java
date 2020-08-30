@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 /** 
 * Input: query.
-* Output: a JSON object. E.g. [{"temperature": 25, "num. cumulative confirmed cases": 100}].
+* Output: a JSON object. 
 */
 @WebServlet("/temperature-query")
 public class TemperatureQueryServlet extends HttpServlet {
@@ -25,10 +25,10 @@ public class TemperatureQueryServlet extends HttpServlet {
     String tempQuery = 
       "SELECT "
       + "  CAST(ROUND(average_temperature_celsius) AS INT64) AS key, "
-      + "  SUM(new_confirmed) AS new_confirmed, "
-      + "  SUM(new_deceased) AS new_deceased, "
-      + "  SUM(new_recovered) AS new_recovered, "
-      + "  SUM(new_tested) AS new_tested "
+      + "  SUM(new_confirmed) AS confirmed, "
+      + "  SUM(new_deceased) AS deceased, "
+      + "  SUM(new_recovered) AS recovered, "
+      + "  SUM(new_tested) AS tested "
       + "FROM "
       + "  `bigquery-public-data.covid19_open_data.covid19_open_data` "
       + "WHERE date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) "

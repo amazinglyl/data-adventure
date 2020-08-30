@@ -1,8 +1,10 @@
+/home/yilong_luan/google-cloud/app/src/main/java/com/servlets/LatitudeTotalQueryServlet.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/data/Cases.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/servlets/LatitudeQueryServlet.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/servlets/TemperatureQueryServlet.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/servlets/QueryServletHelper.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/data/Landmark.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/servlets/ChartDataServlet.java
+/home/yilong_luan/google-cloud/app/src/main/java/com/servlets/TemperatureTotalQueryServlet.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/servlets/NaturalLanguageAnalyzer.java
 /home/yilong_luan/google-cloud/app/src/main/java/com/servlets/DataServlet.java
