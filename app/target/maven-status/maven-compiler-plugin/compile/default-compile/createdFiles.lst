@@ -1,0 +1,8 @@
+com/data/Cases.class
+com/servlets/TemperatureQueryServlet.class
+com/servlets/ChartDataServlet.class
+com/servlets/QueryServletHelper.class
+com/data/Landmark.class
+com/servlets/DataServlet.class
+com/servlets/NaturalLanguageAnalyzer.class
+com/servlets/LatitudeQueryServlet.class

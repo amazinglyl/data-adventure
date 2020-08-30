@@ -10,20 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.cloud.bigquery.BigQuery;
-import com.google.cloud.bigquery.BigQueryOptions;
-import com.google.cloud.bigquery.FieldValueList;
-import com.google.cloud.bigquery.Job;
-import com.google.cloud.bigquery.JobId;
-import com.google.cloud.bigquery.JobInfo;
-import com.google.cloud.bigquery.QueryJobConfiguration;
-import com.google.cloud.bigquery.TableResult;
-import java.util.UUID;
-
-import java.lang.Exception;
-import java.util.Optional;
-import com.google.auth.oauth2.GoogleCredentials;
-
 /** 
 * Input: query.
 * Output: a JSON object. E.g. [{"latitude": 20, "num. cumulative confirmed cases": 100}].
@@ -39,7 +25,7 @@ public class LatitudeQueryServlet extends HttpServlet {
     // Query cases vs temperature for the last one week.
     String atitudeQuery = 
       "SELECT "
-      + "  CAST(ROUND(latitude) AS INT64) AS latitude, "
+      + "  CAST(ROUND(latitude) AS INT64) AS key, "
       + "  SUM(new_confirmed) AS new_confirmed, "
       + "  SUM(new_deceased) AS new_deceased, "
       + "  SUM(new_recovered) AS new_recovered, "
@@ -48,7 +34,7 @@ public class LatitudeQueryServlet extends HttpServlet {
       + "  `bigquery-public-data.covid19_open_data.covid19_open_data` "
       + "WHERE date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) "
       + "GROUP BY 1 "
-      + "ORDER BY 1";
+      + "ORDER BY 1"; // Need to order the data so that they are connected in order in the line charts.
     QueryServletHelper helper = new QueryServletHelper();
     casesByLatitude = helper.getQueryData(atitudeQuery);
   }

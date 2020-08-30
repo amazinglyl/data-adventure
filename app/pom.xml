@@ -5,7 +5,7 @@
 
   <groupId>com.java</groupId>
   <!-- TODO: rename artifactId -->
-  <artifactId>maps-hello-world</artifactId>
+  <artifactId>lyl-cloud-project</artifactId>
   <version>1</version>
   <packaging>war</packaging>
 
@@ -68,7 +68,7 @@
         <version>2.2.0</version>
         <configuration>
           <!-- A project id created from Google cloud platform. -->
-          <deploy.projectId>sample-java-project-287504</deploy.projectId>
+          <deploy.projectId>lyl-cloud</deploy.projectId>
           <deploy.version>1</deploy.version>
         </configuration>
       </plugin>
