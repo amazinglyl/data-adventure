@@ -39,7 +39,7 @@ handlers:
   script: unused
   login: optional
   secure: optional
-- url: /query
+- url: /delete-task
   script: unused
   login: optional
   secure: optional
@@ -47,7 +47,15 @@ handlers:
   script: unused
   login: optional
   secure: optional
+- url: /my-data-url
+  script: unused
+  login: optional
+  secure: optional
 - url: /landmarks
+  script: unused
+  login: optional
+  secure: optional
+- url: /list-tasks
   script: unused
   login: optional
   secure: optional
@@ -56,6 +64,10 @@ handlers:
   login: optional
   secure: optional
 - url: /sentiment
+  script: unused
+  login: optional
+  secure: optional
+- url: /new-task
   script: unused
   login: optional
   secure: optional
