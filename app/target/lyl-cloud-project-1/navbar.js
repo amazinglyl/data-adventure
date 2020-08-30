@@ -2,7 +2,7 @@ document.write(`
 
 <nav class="navbar navbar-fixed-top navbar-expand-sm navbar-light bg-light mb-3">
     <div class="container">
-        <a class="navbar-brand" href="#">Data Adventure</a>
+        <a class="navbar-brand" href="index.html">Data Adventure</a>
         <button class="navbar-toggler" data-toggle="collapse" data-target="#navbarNav"><span
                 class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarNav">
