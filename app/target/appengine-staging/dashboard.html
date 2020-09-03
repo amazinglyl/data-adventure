@@ -21,6 +21,10 @@
     <h3>Cumulative cases</h3>
     <p> The figures below show the total number of cumulative cases (2 days ago) as a function of temperature or latitude.</p>
     <div id="dashboard">
+      <div id="loading">
+        <img id="loading-image" src="images/loading.gif" alt="Loading..." />
+      </div>
+
       <table class="columns">
         <tr>
           <td>
@@ -45,6 +49,11 @@
     <div id="charts">
       <h3>New cases</h3>
       <p> The figures below show the total number of new cases in the past one week as a function of temperature or latitude.</p>
+
+      <div id="loading">
+        <img id="loading-image" src="images/loading.gif" alt="Loading..." />
+      </div>
+      
       <table class="columns">
         <tr>
           <td><div id="temp-column" style="text-align: center">Temperature</div></td>
@@ -81,6 +90,15 @@
   </div>
 
   <div style="margin-top:200px;"></div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+
+  <script>
+    $(window).load(function() {
+      $('#loading').fadeOut(15000);  // 15s
+    });
+  </script>
 
 </body>
 </html>
