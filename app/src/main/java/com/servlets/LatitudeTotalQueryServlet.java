@@ -25,7 +25,7 @@ public class LatitudeTotalQueryServlet extends HttpServlet {
     // Query cases vs temperature for 2 days ago.
     String atitudeQuery = 
       "SELECT "
-      + "  CAST(ROUND(latitude) AS INT64) AS key, "
+      + "  CAST(latitude AS INT64) AS key, "
       + "  SUM(cumulative_confirmed) AS confirmed "
       + "FROM "
       + "  `bigquery-public-data.covid19_open_data.covid19_open_data` "

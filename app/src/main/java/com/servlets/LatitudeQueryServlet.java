@@ -23,9 +23,11 @@ public class LatitudeQueryServlet extends HttpServlet {
   @Override
   public void init() {
     // Query cases vs temperature for the last one week.
+    // latitude in the database is a string. Casting it to int64 works like the round function.
+    // E.g. CAST("11.5" AS INT64) = 12.
     String atitudeQuery = 
       "SELECT "
-      + "  CAST(ROUND(latitude) AS INT64) AS key, "
+      + "  CAST(latitude AS INT64) AS key, "
       + "  SUM(new_confirmed) AS confirmed, "
       + "  SUM(new_deceased) AS deceased, "
       + "  SUM(new_recovered) AS recovered, "
