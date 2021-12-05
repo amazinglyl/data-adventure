@@ -29,7 +29,7 @@ public class LatitudeQueryServlet extends HttpServlet {
       + "  SUM(new_confirmed) AS new_confirmed, "
       + "  SUM(new_deceased) AS new_deceased, "
       + "  SUM(new_recovered) AS new_recovered, "
-      + "  SUM(new_tested) AS new_tested "
+      + "  SUM(CAST(new_tested AS INT64)) AS new_tested "
       + "FROM "
       + "  `bigquery-public-data.covid19_open_data.covid19_open_data` "
       + "WHERE date BETWEEN DATE_SUB(CURRENT_DATE(), INTERVAL 7 DAY) AND DATE_SUB(CURRENT_DATE(), INTERVAL 1 DAY) "
